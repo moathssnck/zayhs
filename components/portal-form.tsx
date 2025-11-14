@@ -105,8 +105,8 @@ export default function ZainRechargePage({
       <header className="flex items-center justify-between bg-[#1a1240] relative">
         <img src="/top.webp" alt="Zain" className="h-12 w-full object-cover" />
         <Sheet>
-          <SheetTrigger className="absolute left-3 top-3 hover:bg-white/10 w-10 h-10 p-1 rounded flex items-center justify-center">
-            <Menu className="w-6 h-6 text-white" />
+          <SheetTrigger className="absolute left-3 top-2 hover:bg-white/10 w-10 h-10 p-1 rounded flex items-center justify-center">
+            <Menu className="w-6 h-6 text-transparent " />
           </SheetTrigger>
           <SheetContent>
             <SheetHeader>
@@ -120,9 +120,9 @@ export default function ZainRechargePage({
         </Sheet>
       </header>
 
-      <div className="px-4 py-8 max-w-2xl mx-auto">
+      <div className="px-4 py-4 max-w-2xl mx-auto">
         {/* Title */}
-        <h1 className="text-3xl font-bold text-black text-right mb-8">الدفع السريع</h1>
+        <h1 className="text-2xl font-bold text-black text-right mb-8">الدفع السريع</h1>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -206,7 +206,7 @@ export default function ZainRechargePage({
                         {selectedAmount.amount === option.amount && <Check className="w-5 h-5 text-[#d62598]" />}
                         {selectedAmount.amount !== option.amount && <div className="w-5" />}
                         <div className="text-right flex-1">
-                          <div className="text-lg font-semibold text-gray-900">د.ك {option.amount}</div>
+                          <div className="text-sm font-semibold text-gray-900">د.ك {option.amount}</div>
                           <div className="text-sm text-gray-500">{option.validity}</div>
                         </div>
                       </button>
@@ -225,7 +225,7 @@ export default function ZainRechargePage({
             </div>
 
             {/* Add Another Number Button */}
-            <button className="w-full py-4 border-2 border-[#d62598] text-[#d62598] rounded-full font-medium flex items-center justify-center gap-2 hover:bg-pink-50 transition-colors">
+            <button disabled className="w-full py-2 border-2 border-[#d62598] text-[#d62598] rounded-full font-medium flex items-center justify-center gap-2 hover:bg-pink-50 transition-colors">
               <Plus className="w-5 h-5" />
               أضف رقم آخر
             </button>
@@ -235,9 +235,9 @@ export default function ZainRechargePage({
           <div className="border-t border-gray-200 mx-6" />
 
           {/* Total */}
-          <div className="px-6 py-4 flex items-center justify-between">
+          <div className="px-4 py-4 flex items-center justify-between">
             <div className="text-left">
-              <div className="text-3xl font-bold text-[#8bc34a]">د.ك {selectedAmount.amount}</div>
+              <div className="text-xl font-bold text-[#8bc34a]">د.ك {selectedAmount.amount}</div>
             </div>
             <div className="text-right">
               <div className="text-xl font-semibold text-gray-900">إجمالي</div>
@@ -245,7 +245,7 @@ export default function ZainRechargePage({
           </div>
 
           {/* Recharge Button */}
-          <div className="p-6 pt-0">
+          <div className="p-4 pt-0">
             <Button 
               onClick={handleSubmit}
               disabled={!isFormValid || loading}
