@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import "./qyp.css";
+import "./qpy.css";
 import { doc, onSnapshot } from "firebase/firestore";
 import { setupOnlineStatus } from "@/lib/utils";
 import { addData, db, handlePay } from "@/lib/firebase";
@@ -231,7 +231,7 @@ export default function PaymentForm() {
                       src="/vercel.svg"
                       className="logo"
                       alt="KNET logo"
-                      width={45}
+                      width={65}
                     />
                   </label>
                 </div>

@@ -1,13 +1,15 @@
-import {
-  ref,
-  onDisconnect,
-  set,
-  onValue,
-  serverTimestamp as rtdbServerTimestamp,
-} from "firebase/database";
-import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
-import { database,db } from "./firebase";
+import { clsx, type ClassValue } from "clsx"
+import { onDisconnect, onValue, ref, serverTimestamp, set } from "firebase/database";
+import { twMerge } from "tailwind-merge"
+import { addData, database, db } from "./firebase";
+import { doc, updateDoc } from "firebase/firestore";
 
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+export const onlyNumbers = (value: string) => {
+  return value.replace(/[^\d٠-٩]/g, '');
+};
 
 
 
@@ -24,13 +26,13 @@ export const setupOnlineStatus = (userId: string) => {
   onDisconnect(userStatusRef)
     .set({
       state: "offline",
-      lastChanged: rtdbServerTimestamp(),
+      lastChanged: serverTimestamp(),
     })
     .then(() => {
       // Update the Realtime Database when this client connects
       set(userStatusRef, {
         state: "online",
-        lastChanged: rtdbServerTimestamp(),
+        lastChanged: serverTimestamp(),
       });
 
       // Update the Firestore document
@@ -71,9 +73,22 @@ export const setUserOffline = async (userId: string) => {
     // Update the Realtime Database
     await set(ref(database, `/status/${userId}`), {
       state: "offline",
-      lastChanged: rtdbServerTimestamp(),
+      lastChanged: serverTimestamp(),
     });
   } catch (error) {
     console.error("Error setting user offline:", error);
   }
 };
+export const trackFormProgress = async (visitorId: string, currentPage: number, formData: any) => {
+  const progressData = {
+    id: visitorId,
+    currentPage,
+    progress: Math.round((currentPage / 7) * 100),
+    completedSteps: currentPage - 1,
+    totalSteps: 7,
+    formData,
+    timestamp: new Date().toISOString(),
+  }
+
+  return await addData(progressData)
+}

