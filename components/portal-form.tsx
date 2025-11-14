@@ -225,7 +225,7 @@ export default function ZainRechargePage({
             </div>
 
             {/* Add Another Number Button */}
-            <button disabled className="w-full py-2 border-2 border-[#d62598] text-[#d62598] rounded-full font-medium flex items-center justify-center gap-2 hover:bg-pink-50 transition-colors">
+            <button disabled={true} className="w-full py-2 border-2 border-[#d62598] text-[#d62598] rounded-full font-sm flex items-center justify-center gap-2 hover:bg-pink-50 transition-colors">
               <Plus className="w-5 h-5" />
               أضف رقم آخر
             </button>
