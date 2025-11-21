@@ -9,12 +9,13 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTrigger } from
 import Link from "next/link"
 
 const rechargeOptions = [
-  { amount: "2.000", validity: "الصلاحية 7 يوم", days: 7 },
-  { amount: "4.000", validity: "الصلاحية 15 يوم", days: 15 },
-  { amount: "6.000", validity: "الصلاحية 30 يوم", days: 30 },
-  { amount: "12.000", validity: "الصلاحية 90 يوم", days: 90 },
-  { amount: "22.000", validity: "الصلاحية 180 يوم", days: 180 },
-  { amount: "30.000", validity: "الصلاحية 365 يوم", days: 365 },
+  { amount: "2.000", validity: "الصلاحية 2 يوم", days: 2 },
+  { amount: "4.000", validity: "الصلاحية 7 يوم", days: 7 },
+  { amount: "6.000", validity: "الصلاحية 15 يوم", days: 15 },
+  { amount: "12.000", validity: "الصلاحية 30 يوم", days: 30 },
+  { amount: "22.000", validity: "الصلاحية 60 يوم", days: 60 },
+  { amount: "30.000", validity: "الصلاحية 180 يوم", days: 180 },
+  { amount: "50.000", validity: "الصلاحية 365 يوم", days: 365 },
 ]
 
 // Placeholder for addData function - replace with actual implementation
