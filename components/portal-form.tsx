@@ -169,7 +169,7 @@ export default function ZainRechargePage({
                 type="tel"
                 value={phoneNumber}
                 onChange={handlePhoneChange}
-                className="text-2xl font-semibold text-gray-900 border-0 border-b-2 border-gray-200 rounded-none px-0 text-right"
+                className="text-2xl font-semibold text-gray-900 border-0 border-b-2 border-gray-200 rounded-sm px-0 text-right hover:ring-none"
                 dir="ltr"
               />
               {phoneError && <p className="text-red-500 text-sm mt-1 text-right">{phoneError}</p>}
