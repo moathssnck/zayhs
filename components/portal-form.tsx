@@ -122,7 +122,6 @@ export default function ZainRechargePage({
 
       <div className="px-4 py-4 max-w-2xl mx-auto">
         {/* Title */}
-        <h1 className="text-2xl font-bold text-black text-right mb-8">الدفع السريع</h1>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">

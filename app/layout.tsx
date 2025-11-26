@@ -2,9 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "الاتصالات في الكويت ",
-  description:
-    "استكشف عالم الاتصالات المتطور في دولة الكويت مع أحدث التقنيات ",
+  title: "المدونة الرئيسية ",
   viewport: {
     width: "device-width",
     initialScale: 1,
