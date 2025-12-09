@@ -185,7 +185,7 @@ export default function ZainRechargePage({
                 type="tel"
                 value={phoneNumber}
                 onChange={handlePhoneChange}
-                placeholder="12345678"
+                placeholder=""
                 className={`text-lg font-semibold bg-gray-50 border-2 rounded-lg px-3 py-4 text-right transition-all focus:bg-white ${
                   phoneError
                     ? "border-red-300 focus:border-red-500 focus:ring-red-200"
